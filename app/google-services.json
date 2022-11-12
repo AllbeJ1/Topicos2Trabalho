@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998146199269",
+    "project_id": "project-notify-medy",
+    "storage_bucket": "project-notify-medy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998146199269:android:d77c0de63a059821710e0c",
+        "android_client_info": {
+          "package_name": "br.com.notify.med"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998146199269-3totioshl6fk7fiac2uuhf9dd38sq43p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByPmM49MRXqXf_jdSWyXqre1rCNQ3RuFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998146199269-3totioshl6fk7fiac2uuhf9dd38sq43p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
