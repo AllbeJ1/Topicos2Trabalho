@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
         this.btnVoltar = findViewById(R.id.btnVoltar);
         this.listaMedicacoes = findViewById(R.id.listaMedicacoes);
 
+
         //Banco de Dados
         DatabaseReference dbMedicacoes = BD.child("medicacoes");
 
@@ -43,6 +45,9 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
                 .build();*/
         this.adapter  = new AdapterMedicacao(this,medicacoes/*options*/);
         listaMedicacoes.setAdapter(adapter);
+
+        this.listaMedicacoes.setLongClickable(true);
+        this.listaMedicacoes.setOnItemLongClickListener(new EscutadorLista());
 
         btnAdicionarMedicacao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,5 +84,17 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
             }
         }
     }
+
+    private class EscutadorLista implements  AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            medicacoes.remove(i);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(),"Medicação removida.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
+
 
 }

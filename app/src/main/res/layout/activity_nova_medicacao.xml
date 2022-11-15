@@ -117,7 +117,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextQuantidade"
+                android:id="@+id/textInputEditTextHorario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -140,7 +140,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextHorario"
+                android:id="@+id/textInputEditTextQuantidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 

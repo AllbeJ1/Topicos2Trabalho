@@ -25,7 +25,7 @@ public class NovaConsultaActivity extends AppCompatActivity {
             textInputEditTextHora, textInputEditTextEndereco, textInputEditTextLembrete;
 
     //Banco de Dados
-    private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
+    //private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class NovaConsultaActivity extends AppCompatActivity {
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private LocalDate getDataByString(String str){
-        DateTimeFormatter formatadorDia = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatadorDia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(str,formatadorDia);
     }
 }

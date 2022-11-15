@@ -1,12 +1,12 @@
 package br.com.notify.med;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,8 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 
 public class NovaMedicacaoActivity extends AppCompatActivity {
     private Button btnAddMedicacao, btnVoltarMedicacao;
@@ -57,14 +57,14 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
                     String nome = textInputEditTextNomeMedicacao.getText().toString();
                     String tipo = textInputEditTextTipo.getText().toString();
                     String quantidade = textInputEditTextQuantidade.getText().toString();
-                    String horario = textInputEditTextHorario.getText().toString();
+                    String horarioString = textInputEditTextHorario.getText().toString();
                     String duracao = textInputEditTextDuracao.getText().toString();
-
+                    LocalTime horario = getHoraByString(horarioString);
                     Intent i = new Intent(getApplicationContext(), NovaMedicacaoActivity.class);
                     Medicacao medicacao = new Medicacao(nome, tipo, quantidade, horario, duracao);
                     i.putExtra("medicacao", medicacao);
                     //As entradas (principalmente horario) deverão ser tratadas, esses dados serão salvos no Banco de Dados
-                    criarAlarme(21,27); //
+                    criarAlarme(horario.getHour(),horario.getMinute()); //Define o Horário do alarme de acordo com o da Medicação
                     //Toast.makeText(getApplicationContext(),"M nome" + medicacao.getNome(),Toast.LENGTH_LONG).show();
                     setResult(RESULT_OK, i);
                     finish();
@@ -95,18 +95,26 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
         AlarmManager alarmMgr = (AlarmManager)getSystemService(ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmeReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(NovaMedicacaoActivity.this, 0, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(NovaMedicacaoActivity.this, 0, intent, FLAG_IMMUTABLE);
 
         Calendar calendar;
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        //calendar.set(Calendar.HOUR_OF_DAY, hora);
-        //calendar.set(Calendar.MINUTE,minuto);
-        calendar.add(Calendar.SECOND,10); //Apenas para testes
+        //calendar.set(Calendar.HOUR_OF_DAY, hora); //Define a Hora
+        //calendar.set(Calendar.MINUTE,minuto); //Define o minuto
+        calendar.add(Calendar.SECOND,20); //Apenas para testes
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+                AlarmManager.INTERVAL_DAY, alarmIntent); //Repete o Alarme diariamente
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private LocalTime getHoraByString(String str){
+        DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("H:mm");
+        return LocalTime.parse(str,formatadorHora);
+
+    }
+
 
 
 

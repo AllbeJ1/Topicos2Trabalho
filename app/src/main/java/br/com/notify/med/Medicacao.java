@@ -1,20 +1,21 @@
 package br.com.notify.med;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 public class Medicacao implements Serializable {
     /*Declaração de Variaveis*/
     private String nome; // Ex: Amoxicillina
     private String tipo; // Ex: Antibiótico
     private String quantidade; // Ex: 1 comprimido
-    private String horario; // Ex: A cada 12hs
+    private LocalTime horario; // Ex: A cada 12hs
     private String duracao; // Ex: 14 dias
 
     // Método Construtor Vazio
     public Medicacao () { }
 
     // Método Construtor
-    public Medicacao(String nome, String tipo, String quantidade, String horario, String duracao) {
+    public Medicacao(String nome, String tipo, String quantidade, LocalTime horario, String duracao) {
         this.nome = nome;
         this.tipo = tipo;
         this.quantidade = quantidade;
@@ -48,11 +49,11 @@ public class Medicacao implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public String getHorario() {
+    public LocalTime getHorario() {
         return horario;
     }
 
-    public void setHorario(String horario) {
+    public void setHorario(LocalTime horario) {
         this.horario = horario;
     }
 

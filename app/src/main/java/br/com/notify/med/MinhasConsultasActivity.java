@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -44,6 +45,9 @@ public class MinhasConsultasActivity extends AppCompatActivity {
                 finish();*/
             }
         });
+        this.listaConsultas.setLongClickable(true);
+        this.listaConsultas.setOnItemLongClickListener(new EscutadorLista());
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent i) {
@@ -59,8 +63,18 @@ public class MinhasConsultasActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),"Chegou OK " + consulta.getNomeMedico() , Toast.LENGTH_LONG).show(); //PAra testes apenas
 
             }else{
-                Toast.makeText(getApplicationContext(),"Nenhuma consulta adicionada. Result = " + resultCode, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Nenhuma consulta adicionada.", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    private class EscutadorLista implements  AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            consultas.remove(i);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(),"Consulta removida.", Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
 

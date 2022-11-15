@@ -59,7 +59,7 @@ public class AdapterMedicacao extends ArrayAdapter<Medicacao>  /*FirebaseListAda
 
 
         lblNomeMedicacao.setText(this.medicacoes.get(position).getNome());
-        lblHorarioMedicacao.setText(this.medicacoes.get(position).getHorario());
+        lblHorarioMedicacao.setText(this.medicacoes.get(position).getHorario().toString());
         lblQuantidadeMedicacao.setText( this.medicacoes.get(position).getQuantidade());
 
 

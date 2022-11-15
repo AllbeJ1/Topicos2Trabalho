@@ -20,6 +20,7 @@ public class AlarmeReceiver extends BroadcastReceiver {
          */
 
 
+
         Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
         vibrator.vibrate(4000);
 
@@ -34,6 +35,9 @@ public class AlarmeReceiver extends BroadcastReceiver {
 
         // play ringtone
         ringtone.play();
+        Intent telaAlarme = new Intent(context, AlarmeMedicacaoActivity.class);
+        
+        context.startActivity(telaAlarme);
     }
 
 }
