@@ -9,10 +9,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.firebase.ui.database.FirebaseListOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
@@ -22,9 +20,10 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
     private ArrayList<Medicacao >medicacoes = new ArrayList<Medicacao>();
     private AdapterMedicacao adapter;
 
-    //Banco de Dados
-    private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
-
+    // Cursor com os dados recuperados do BD
+    Cursor cursorMedicacoes;
+    // Referência para o banco de dados
+    SQLiteDatabase bd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +33,19 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
         this.btnVoltar = findViewById(R.id.btnVoltar);
         this.listaMedicacoes = findViewById(R.id.listaMedicacoes);
 
+        // Abrindo ou criando o banco de dados
+        bd = openOrCreateDatabase( "listamedicacoes", MODE_PRIVATE, null );
+        // String para comandos SQL
+        String cmd;
+        // Criar a tabela artistas, se a mesma não existir
+        cmd = "CREATE TABLE IF NOT EXISTS medicacoes (";
+        cmd = cmd + "id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, tipo VARCHAR, quantidade VARCHAR, horario VARCHAR, duracao VARCHAR)";
+        bd.execSQL( cmd );
 
-        //Banco de Dados
-        DatabaseReference dbMedicacoes = BD.child("medicacoes");
+        // Criando cursor com os dados vindos do banco
+        cursorMedicacoes = bd.rawQuery( "SELECT _rowid_ _id, id, nome, horario, quantidade FROM medicacoes", null );
 
-        /*FirebaseListOptions<Medicacao> options = new FirebaseListOptions.Builder<Medicacao>()
-                .setLayout(R.layout.item_lista_medicacao)
-                .setQuery(dbMedicacoes, Medicacao.class)
-                .setLifecycleOwner(this)
-                .build();*/
-        this.adapter  = new AdapterMedicacao(this,medicacoes/*options*/);
+        this.adapter  = new AdapterMedicacao(this,cursorMedicacoes/*options*/);
         listaMedicacoes.setAdapter(adapter);
 
         this.listaMedicacoes.setLongClickable(true);

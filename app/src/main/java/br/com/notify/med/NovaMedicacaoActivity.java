@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +31,14 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
             textInputEditTextHorario, textInputEditTextDuracao;
 
     //Banco de Dados
-    private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
+    //private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
+
+    // Adapter da lista de medicacoes
+    AdapterMedicacao adapterMedicacoes;
+    // Cursor com os dados recuperados do BD
+    Cursor cursorMedicacoes;
+    // Referência para o banco de dados
+    SQLiteDatabase bd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,9 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
         this.btnAddMedicacao = findViewById(R.id.btnAddMedicacao);
         this.btnVoltarMedicacao = findViewById(R.id.btnVoltarMedicacao);
 
+        // Abrindo ou criando o banco de dados
+        bd = openOrCreateDatabase( "listamedicacoes", MODE_PRIVATE, null );
+
         this.btnAddMedicacao.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -54,11 +66,31 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
 
                 }else {
+                    // Pegando os dados na interface
                     String nome = textInputEditTextNomeMedicacao.getText().toString();
                     String tipo = textInputEditTextTipo.getText().toString();
                     String quantidade = textInputEditTextQuantidade.getText().toString();
                     String horarioString = textInputEditTextHorario.getText().toString();
                     String duracao = textInputEditTextDuracao.getText().toString();
+
+                    // Montando SQL para inserir dados
+                    String cmd = "INSERT INTO medicacoes (nome, tipo, quantidade, horario, duracao) VALUES ('";
+                    cmd = cmd + nome;
+                    cmd = cmd + "', '";
+                    cmd = cmd + tipo;
+                    cmd = cmd + "', '";
+                    cmd = cmd + quantidade;
+                    cmd = cmd + "', '";
+                    cmd = cmd + horarioString;
+                    cmd = cmd + "', '";
+                    cmd = cmd + duracao;
+                    cmd = cmd + "')";
+                    // Executando comando
+                    bd.execSQL( cmd );
+                    // Renovando o cursor do adapter, já que temos novos dados no bd
+                    cursorMedicacoes = bd.rawQuery( "SELECT _rowid_ _id, id, nome, horario, quantidade FROM medicacoes", null );
+                    adapterMedicacoes.changeCursor(cursorMedicacoes);
+
                     LocalTime horario = getHoraByString(horarioString);
                     Intent i = new Intent(getApplicationContext(), NovaMedicacaoActivity.class);
                     Medicacao medicacao = new Medicacao(nome, tipo, quantidade, horario, duracao);

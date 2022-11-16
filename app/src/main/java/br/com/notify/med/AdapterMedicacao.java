@@ -1,6 +1,8 @@
 package br.com.notify.med;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,27 +11,50 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.cursoradapter.widget.CursorAdapter;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseListOptions;
 
 import java.util.ArrayList;
 
-public class AdapterMedicacao extends ArrayAdapter<Medicacao>  /*FirebaseListAdapter<Medicacao>*/ {
+public class AdapterMedicacao extends CursorAdapter /*extends ArrayAdapter<Medicacao>*/ {
     private Context context;
     private ArrayList<Medicacao> medicacoes;
 
-    //Banco de Dados
-    private DatabaseReference BD = FirebaseDatabase.getInstance().getReference();
-
-    public AdapterMedicacao(Context context, ArrayList<Medicacao> medicacoes/*FirebaseListOptions options*/) {
-        //super(options);
-        super(context, R.layout.item_lista_medicacao, medicacoes);
+    public AdapterMedicacao(Context context, Cursor cursor /*ArrayList<Medicacao> medicacoes*/ ){
+        super(context, cursor, 0);
+        //super(context, R.layout.item_lista_medicacao, medicacoes);
         this.context = context;
-        this.medicacoes = medicacoes;
+        //this.medicacoes = medicacoes;
     }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        // Recupera o objeto inflador
+        LayoutInflater inflater = LayoutInflater.from(context);
+        // Infla o xml, gerando a visualização (view)
+        View v = inflater.inflate(R.layout.item_lista_medicacao, parent, false);
+        // Retorna o objeto inflado (a view gerada)
+        return v;
+    }
+
+    @SuppressLint("Range")
+    @Override
+    public void bindView(View v, Context context, Cursor cursor) {
+        // Recuperando os objetos gráficos de dentro da view recebid
+        TextView lblNomeMedicacao = v.findViewById(R.id.lblNomeMedicacao);
+        TextView lblHorarioMedicacao = v.findViewById(R.id.lblHorarioMedicacao);
+        TextView lblQuantidadeMedicacao = v.findViewById(R.id.lblQuantidadeMedicacao);
+
+        // O cursor já vem posicionado na linha correta...
+        // Basta recuperarmos os dados
+        // Finalmente, colocamos os dados nos objetos gráficos que estão dentro do item da lista
+        lblNomeMedicacao.setText(cursor.getString(cursor.getColumnIndex("nome")));
+        lblHorarioMedicacao.setText(cursor.getString(cursor.getColumnIndex("horario")));
+        lblQuantidadeMedicacao.setText(cursor.getString(cursor.getColumnIndex("quantidade")));
+    }
+
 
     /*@Override
     protected void populateView(View v, Medicacao medicacao, int position) {
@@ -44,7 +69,7 @@ public class AdapterMedicacao extends ArrayAdapter<Medicacao>  /*FirebaseListAda
     }*/
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+   /* @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Recupera um objeto "inflador" de layouts
@@ -67,29 +92,5 @@ public class AdapterMedicacao extends ArrayAdapter<Medicacao>  /*FirebaseListAda
         //dados.addValueEventListener(new EscutadorFirebase());
 
         return itemView;
-    }
-
-    /*private class EscutadorFirebase implements ValueEventListener {
-        // O método onDataChange é chamado em 2 ocasiões:
-        // - assim que o Escutador é criado e associado ao respectivo nó;
-        // - sempre que houver alguma alteração nos dados.
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            // Os dados recuperados no Firebase vem dentro de um DataSnapshot.
-            // No nosso caso, só vai ter um objeto lá dentro (objeto da classe Usuario).
-            // Precisamos testar se veio alguma informação, isto é, se o dataSnapshot existe...
-            if ( dataSnapshot.exists()) {
-                // Recuperamos o objeto Usuario que veio dentro do dataSnapshot:
-                Medicacao medicacao = dataSnapshot.getValue(Medicacao.class);
-                // Colocando os dados do objeto lido na interface gráfica.
-                lblNomeMedicacao.setText(medicacao.getNome());
-                lblHorarioMedicacao.setText(medicacao.getHorario());
-                lblQuantidadeMedicacao.setText(medicacao.getQuantidade());
-            }
-        }
-
-        // Não trabalharemos com este método. Mas ele tem que existir!!
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) { }
     }*/
 }

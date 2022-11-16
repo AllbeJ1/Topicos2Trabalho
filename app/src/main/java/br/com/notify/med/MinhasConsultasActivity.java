@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,11 @@ public class MinhasConsultasActivity extends AppCompatActivity {
     private ArrayList<Consulta> consultas = new ArrayList<Consulta>();
     private AdapterConsulta adapter;
 
+    // Cursor com os dados recuperados do BD
+    Cursor cursorConsultas;
+    // Referência para o banco de dados
+    SQLiteDatabase bd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +32,20 @@ public class MinhasConsultasActivity extends AppCompatActivity {
         this.btnAdicionarConsulta = findViewById(R.id.btnAdicionarConsulta);
         this.btnVoltar = findViewById(R.id.btnVoltar);
         this.listaConsultas = findViewById(R.id.listaConsultas);
-        this.adapter  = new AdapterConsulta(this,consultas);
+
+        // Abrindo ou criando o banco de dados
+        bd = openOrCreateDatabase( "listaconsultas", MODE_PRIVATE, null );
+        // String para comandos SQL
+        String cmd;
+        // Criar a tabela artistas, se a mesma não existir
+        cmd = "CREATE TABLE IF NOT EXISTS consultas (";
+        cmd = cmd + "id INTEGER PRIMARY KEY AUTOINCREMENT, nomeMedico VARCHAR, motivoConsulta VARCHAR, lembrete VARCHAR, localizacao VARCHAR, data VARCHAR, horario VARCHAR)";
+        bd.execSQL( cmd );
+
+        // Criando cursor com os dados vindos do banco
+        cursorConsultas = bd.rawQuery( "SELECT _rowid_ _id, id, nomeMedico, data, horario FROM consultas", null );
+
+        this.adapter  = new AdapterConsulta(this,cursorConsultas);
         listaConsultas.setAdapter(adapter);
 
         btnAdicionarConsulta.setOnClickListener(new View.OnClickListener() {
