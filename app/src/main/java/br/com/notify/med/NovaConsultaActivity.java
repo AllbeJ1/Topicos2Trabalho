@@ -45,7 +45,7 @@ public class NovaConsultaActivity extends AppCompatActivity {
         this.btnVoltaConsulta = findViewById(R.id.btnVoltaConsulta);
 
         // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase( "listaconsultas", MODE_PRIVATE, null );
+        bd = openOrCreateDatabase( "safetymed_bd", MODE_PRIVATE, null );
 
         btnAddConsulta.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)

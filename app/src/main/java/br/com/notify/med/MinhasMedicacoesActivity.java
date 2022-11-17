@@ -34,7 +34,7 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
         this.listaMedicacoes = findViewById(R.id.listaMedicacoes);
 
         // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase( "listamedicacoes", MODE_PRIVATE, null );
+        bd = openOrCreateDatabase( "safetymed_bd", MODE_PRIVATE, null );
         // String para comandos SQL
         String cmd;
         // Criar a tabela artistas, se a mesma não existir
@@ -48,8 +48,7 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
         this.adapter  = new AdapterMedicacao(this,cursorMedicacoes/*options*/);
         listaMedicacoes.setAdapter(adapter);
 
-        this.listaMedicacoes.setLongClickable(true);
-        this.listaMedicacoes.setOnItemLongClickListener(new EscutadorLista());
+
 
         btnAdicionarMedicacao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,40 +62,12 @@ public class MinhasMedicacoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-                /*Intent i = new Intent(getApplicationContext(),NovaConsultaActivity.class);
-                setResult(RESULT_CANCELED,i);
-                finish();*/
+
             }
         });
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent i) {
-        super.onActivityResult(requestCode, resultCode, i);
 
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Medicacao medicacao = null;
-                medicacao = (Medicacao) i.getSerializableExtra("medicacao");
-                medicacoes.add(medicacao);
-                adapter.notifyDataSetChanged();
 
-                //Toast.makeText(getApplicationContext(),"Chegou OK " + consulta.getNomeMedico() , Toast.LENGTH_LONG).show(); //PAra testes apenas
-
-            }else{
-                Toast.makeText(getApplicationContext(),"Nenhuma Medicação adicionada", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private class EscutadorLista implements  AdapterView.OnItemLongClickListener {
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            medicacoes.remove(i);
-            adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(),"Medicação removida.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-    }
 
 
 }

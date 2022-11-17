@@ -54,7 +54,7 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
         this.btnVoltarMedicacao = findViewById(R.id.btnVoltarMedicacao);
 
         // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase( "listamedicacoes", MODE_PRIVATE, null );
+        bd = openOrCreateDatabase( "safetymed_bd", MODE_PRIVATE, null );
 
         this.btnAddMedicacao.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -87,18 +87,19 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
                     cmd = cmd + "')";
                     // Executando comando
                     bd.execSQL( cmd );
+
+
+
+
+                    LocalTime horario = getHoraByString(horarioString);
+
+                    criarAlarme(horario.getHour(),horario.getMinute()); //Define o Horário do alarme de acordo com o da Medicação
+                    //Toast.makeText(getApplicationContext(),"M nome" + medicacao.getNome(),Toast.LENGTH_LONG).show();
+                    //setResult(RESULT_OK, i);
+
                     // Renovando o cursor do adapter, já que temos novos dados no bd
                     cursorMedicacoes = bd.rawQuery( "SELECT _rowid_ _id, id, nome, horario, quantidade FROM medicacoes", null );
                     adapterMedicacoes.changeCursor(cursorMedicacoes);
-
-                    LocalTime horario = getHoraByString(horarioString);
-                    Intent i = new Intent(getApplicationContext(), NovaMedicacaoActivity.class);
-                    Medicacao medicacao = new Medicacao(nome, tipo, quantidade, horario, duracao);
-                    i.putExtra("medicacao", medicacao);
-                    //As entradas (principalmente horario) deverão ser tratadas, esses dados serão salvos no Banco de Dados
-                    criarAlarme(horario.getHour(),horario.getMinute()); //Define o Horário do alarme de acordo com o da Medicação
-                    //Toast.makeText(getApplicationContext(),"M nome" + medicacao.getNome(),Toast.LENGTH_LONG).show();
-                    setResult(RESULT_OK, i);
                     finish();
                 }
             }
@@ -127,17 +128,17 @@ public class NovaMedicacaoActivity extends AppCompatActivity {
         AlarmManager alarmMgr = (AlarmManager)getSystemService(ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmeReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(NovaMedicacaoActivity.this, 0, intent, FLAG_IMMUTABLE);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, FLAG_IMMUTABLE);
 
         Calendar calendar;
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        //calendar.set(Calendar.HOUR_OF_DAY, hora); //Define a Hora
-        //calendar.set(Calendar.MINUTE,minuto); //Define o minuto
-        calendar.add(Calendar.SECOND,20); //Apenas para testes
+        calendar.set(Calendar.HOUR_OF_DAY, hora); //Define a Hora
+        calendar.set(Calendar.MINUTE,minuto); //Define o minuto
+        // calendar.add(Calendar.SECOND,20); //Apenas para testes
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent); //Repete o Alarme diariamente
-
+       // Toast.makeText(getApplicationContext(),"Criamos um alarme para essa medicação!", Toast.LENGTH_LONG);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

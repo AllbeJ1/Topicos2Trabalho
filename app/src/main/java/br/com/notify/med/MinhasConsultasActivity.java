@@ -34,7 +34,7 @@ public class MinhasConsultasActivity extends AppCompatActivity {
         this.listaConsultas = findViewById(R.id.listaConsultas);
 
         // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase( "listaconsultas", MODE_PRIVATE, null );
+        bd = openOrCreateDatabase( "safetymed_bd", MODE_PRIVATE, null );
         // String para comandos SQL
         String cmd;
         // Criar a tabela artistas, se a mesma não existir
@@ -65,8 +65,7 @@ public class MinhasConsultasActivity extends AppCompatActivity {
                 finish();*/
             }
         });
-        this.listaConsultas.setLongClickable(true);
-        this.listaConsultas.setOnItemLongClickListener(new EscutadorLista());
+
 
     }
 
@@ -87,15 +86,6 @@ public class MinhasConsultasActivity extends AppCompatActivity {
             }
         }
     }
-    private class EscutadorLista implements  AdapterView.OnItemLongClickListener {
 
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            consultas.remove(i);
-            adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(),"Consulta removida.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-    }
 
 }

@@ -14,6 +14,10 @@ public class Medicacao implements Serializable {
     // Método Construtor Vazio
     public Medicacao () { }
 
+    public Medicacao(String nome, String quantidade){
+        this.nome = nome;
+        this.quantidade = quantidade;
+    }
     // Método Construtor
     public Medicacao(String nome, String tipo, String quantidade, LocalTime horario, String duracao) {
         this.nome = nome;

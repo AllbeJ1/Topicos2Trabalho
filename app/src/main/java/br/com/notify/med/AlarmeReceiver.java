@@ -14,15 +14,9 @@ public class AlarmeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent i) {
 
-        /*
-            Implementaremos aqui a chamada da Activy alarme para permitir o idoso encerrar o alarme.
-            Também será buscado o medicamento correspondente a esse horário.
-         */
-
-
 
         Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
-        vibrator.vibrate(4000);
+        vibrator.vibrate(4000); //Vibra por 4 segundos
 
         Toast.makeText(context, "Hora do remédio!", Toast.LENGTH_LONG).show();
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -30,10 +24,10 @@ public class AlarmeReceiver extends BroadcastReceiver {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        // setting default ringtone
+        //Usa o despertador/alarme do celular
         Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
 
-        // play ringtone
+        // Toca o alarme
         ringtone.play();
         Intent telaAlarme = new Intent(context, AlarmeMedicacaoActivity.class);
         

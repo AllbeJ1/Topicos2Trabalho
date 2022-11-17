@@ -18,13 +18,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class AdapterMedicacao extends CursorAdapter /*extends ArrayAdapter<Medicacao>*/ {
+public class AdapterMedicacao extends CursorAdapter {
     private Context context;
     private ArrayList<Medicacao> medicacoes;
 
-    public AdapterMedicacao(Context context, Cursor cursor /*ArrayList<Medicacao> medicacoes*/ ){
+    public AdapterMedicacao(Context context, Cursor cursor ){
         super(context, cursor, 0);
-        //super(context, R.layout.item_lista_medicacao, medicacoes);
+       
         this.context = context;
         //this.medicacoes = medicacoes;
     }
@@ -56,41 +56,4 @@ public class AdapterMedicacao extends CursorAdapter /*extends ArrayAdapter<Medic
     }
 
 
-    /*@Override
-    protected void populateView(View v, Medicacao medicacao, int position) {
-
-        TextView lblNomeMedicacao = v.findViewById(R.id.lblNomeMedicacao);
-        TextView lblHorarioMedicacao = v.findViewById(R.id.lblHorarioMedicacao);
-        TextView lblQuantidadeMedicacao = v.findViewById(R.id.lblQuantidadeMedicacao);
-
-        lblNomeMedicacao.setText(this.medicacoes.get(position).getNome());
-        lblHorarioMedicacao.setText(this.medicacoes.get(position).getHorario());
-        lblQuantidadeMedicacao.setText( this.medicacoes.get(position).getQuantidade());
-    }*/
-
-
-   /* @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Recupera um objeto "inflador" de layouts
-        LayoutInflater li = LayoutInflater.from(parent.getContext());
-        // "Inflando" o XML do item da lista, gerando sua visualização (view)
-        View itemView = li.inflate(R.layout.item_lista_medicacao, parent, false);
-
-        TextView lblNomeMedicacao = itemView.findViewById(R.id.lblNomeMedicacao);
-        TextView lblHorarioMedicacao = itemView.findViewById(R.id.lblHorarioMedicacao);
-        TextView lblQuantidadeMedicacao = itemView.findViewById(R.id.lblQuantidadeMedicacao);
-
-
-
-        lblNomeMedicacao.setText(this.medicacoes.get(position).getNome());
-        lblHorarioMedicacao.setText(this.medicacoes.get(position).getHorario().toString());
-        lblQuantidadeMedicacao.setText( this.medicacoes.get(position).getQuantidade());
-
-
-        //DatabaseReference dados = BD.child("dados");
-        //dados.addValueEventListener(new EscutadorFirebase());
-
-        return itemView;
-    }*/
 }
